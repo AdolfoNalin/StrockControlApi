@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace StockControlApi.Models
 {
@@ -24,6 +25,7 @@ namespace StockControlApi.Models
 
         public DateTime? UpdatedAt { get; set; }
 
+        [JsonIgnore]
         [ForeignKey(nameof(UserId))]
         public User? User { get; set; }
     }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace StockControlApi.Models
 {
@@ -57,6 +58,7 @@ namespace StockControlApi.Models
         [Required(ErrorMessage = "O campo de Data está vazio")]
         public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 
+        [JsonIgnore]
         [ForeignKey(nameof(UserId))]
         public User? User { get; set; }
     }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace StockControlApi.Models
 {
@@ -40,9 +41,11 @@ namespace StockControlApi.Models
         [DataType(DataType.Date)]
         public DateTime MovementDate { get; set; } = DateTime.UtcNow;
 
+        [JsonIgnore]
         [ForeignKey(nameof(ProductId))]
         public Product? Product { get; set; }
 
+        [JsonIgnore]
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }
     }

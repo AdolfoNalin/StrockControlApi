@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace StockControlApi.Models
 {
@@ -83,12 +84,15 @@ namespace StockControlApi.Models
         [MaxLength(500, ErrorMessage = "Limite de 500 caracteris")]
         public string? Observation { get; set; }
 
+        [JsonIgnore]
         [ForeignKey(nameof(SupplierId))]
         public Supplier? Supplier { get; set; }
 
+        [JsonIgnore]
         [ForeignKey(nameof(UserId))]
         public User? User { get; set; }
 
+        [JsonIgnore]
         [ForeignKey(nameof(BrandId))]
         public Brand? Brand { get; set; }
     }
