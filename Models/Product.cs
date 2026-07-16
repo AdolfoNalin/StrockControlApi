@@ -67,12 +67,12 @@ namespace StockControlApi.Models
 
         [Required(ErrorMessage = "O campo preço de compra está vazio")]
         [Range(typeof(Decimal), "0.01", "999999999")]
-        [Column(TypeName = "decimal(10,2")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal BuyPrice { get; set; }
 
         [Required(ErrorMessage = "O campo preço de venda está vazio")]
         [Range(typeof(Decimal), "0.01", "999999999")]
-        [Column(TypeName = "decimal(10,2")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal SalePrice { get; set; }
 
         [Required(ErrorMessage = "O campo unidade está vazio")]
@@ -84,7 +84,7 @@ namespace StockControlApi.Models
         [Required(ErrorMessage = "O Campo ativo deve ser preenchido")]
         public bool IsActive { get; set; } = true;
 
-        [Column(TypeName = "decimal(10,2")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal ProfitMargin =>
         BuyPrice == 0
         ? 0
