@@ -4,26 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StockControlApi.Models
 {
-    public enum Category
-    {
-        Food,
-        Drinks,
-        Cleaning,
-        PersonalHygiene,
-        Office,
-        Computing,
-        Electronics,
-        Tools,
-        ElectricalSupplies,
-        HydraulicMaterials,
-        Clothing,
-        Footwear,
-        Furniture,
-        AutoParts,
-        PetShop,
-        Medicines
-    }
-
     public enum UnitType
     {
         Unit,
