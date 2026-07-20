@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using StockControlApi.Data;
+using StockControlApi.Service;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,9 @@ builder.Services.AddControllers();
 // Adiciona o Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("key").Get<string>());
 
