@@ -27,8 +27,7 @@ namespace StockControlApi.Models
         [Required(ErrorMessage = "É necessário ter um fornecedor")]
         public Guid SupplierId { get; set; }
 
-        [Required(ErrorMessage = "É necessário ter a categoria")]
-        public Category Category{ get; set; }
+        public Guid CategoryId { get; set; }
 
         [Required(ErrorMessage = "Código interno não foi incrementado")]
         public int InternalCode { get; set; }
@@ -83,6 +82,10 @@ namespace StockControlApi.Models
 
         [MaxLength(500, ErrorMessage = "Limite de 500 caracteris")]
         public string? Observation { get; set; }
+
+        [JsonIgnore]
+        [ForeignKey(nameof(CategoryId))]
+        public Category Category { get; set; }
 
         [JsonIgnore]
         [ForeignKey(nameof(SupplierId))]
