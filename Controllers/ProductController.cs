@@ -3,192 +3,96 @@ using Microsoft.EntityFrameworkCore;
 using StockControlApi.Data;
 using StockControlApi.Libiries;
 using StockControlApi.Models;
+using StockControlApi.Service;
 
 namespace StockControlApi.Controllers
 {
     [ApiController]
-    [Route("[Controller]")]
+    [Route("api/[Controller]")]
     public class ProductController : ControllerBase
     {
-        private readonly ApiStockControlContext _context;
+        private readonly IProductService _productService;
 
-        public ProductController(ApiStockControlContext context)
+        public ProductController(IProductService service)
         {
-            _context = context;
+            _productService = service;
         }
+
+        #region GetByStatus
+        /// <summary>
+        /// Function responsible for Get product Active or deasactivate in database
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("active/bool:{value}")]
+        public async Task<IActionResult> GetByStatus([FromRoute] bool value)
+        {
+            return Ok(await _productService.GetByStatus(value));
+        }
+        #endregion
 
         #region GetAll
         /// <summary>
         /// Function responsible for Get product in database
         /// </summary>
         /// <returns></returns>
-        [HttpGet("Product")]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                List<Product> products = await _context.Product.OrderBy(p => p.Description).ToListAsync();
-                return Ok(products);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(MessageException.MessageBadRequest(ex));
-            }
+            return Ok(await _productService.GetAll());
         }
         #endregion
 
-        #region Post
+        #region GetId
+        /// <summary>
+        /// Function responsible for Get product in database
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        {
+            return Ok(await _productService.GetById(id));
+        }
+        #endregion
+
+        #region Create
         /// <summary>
         /// Function responsible for insert the product in database
         /// </summary>
         /// <param name="product"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        [HttpPost("Product")]
-        public async Task<IActionResult> Post(Product product)
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] Product product)
         {
-            try
-            {
-                if(product is null)
-                {
-                    return BadRequest("Produto vazio. Por favor, preencha todos os camposs");
-                }
-                else if(await _context.Product.AnyAsync(p => p.Id == product.Id || p.Description.ToUpper() == product.Description.ToUpper()))
-                {
-                    return Conflict("Produto já existe no banco!");
-                }
-                else
-                {
-                    if (product.IsActive)
-                    {
-                        _context.Product.Add(product);
-                        int value = await _context.SaveChangesAsync();
-
-                        if (value == 1)
-                        {
-                            return Ok($"Produto {product.Description} cadastrado com sucesso");
-                        }
-                        else
-                        {
-                            return BadRequest("Algo deu errado");
-                        }
-                    }
-                    else
-                    {
-                        return BadRequest("Impósivel cadastrar produto Desativado");
-                    }
-                }
-            }
-            catch(ArgumentNullException ane)
-            {
-                return NotFound(ane.ParamName);
-            }
-            catch(ArgumentException ae)
-            {
-                return NotFound(ae.ParamName);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(MessageException.MessageBadRequest(ex));
-            }
+            return Ok(await _productService.Post(product));
         }
         #endregion
 
-        #region Put
+        #region Update
         /// <summary>
         /// Function responsible for update the product in database
         /// </summary>
         /// <param name="product"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        [HttpPut("Product")]
-        public async Task<IActionResult> Put(Product product)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] Product product)
         {
-            try
-            {
-                if (product is null)
-                {
-                    return BadRequest("Produto vazio. Por favor, preencha todos os camposs");
-                }
-                else if (await _context.Product.AnyAsync(p => p.Id == product.Id || p.Description.ToUpper().Contains(product.Description.ToUpper())))
-                {
-                    _context.Product.Update(product);
-                    int value = await _context.SaveChangesAsync();
-
-                    if (value == 1)
-                    {
-                        return Ok($"Produto {product.Description} cadastrado com sucesso");
-                    }
-                    else
-                    {
-                        return BadRequest("Algo deu errado");
-                    }
-                }
-                else
-                {
-                    return BadRequest("Produto não existe no banco!");
-                }
-            }
-            catch (ArgumentNullException ane)
-            {
-                return NotFound(ane.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(MessageException.MessageBadRequest(ex));
-            }
+            return Ok(await _productService.Put(product));
         }
         #endregion
 
-        #region IsActive
+        #region ChangeStatus
         /// <summary>
         /// Function resposible for active or deasactivate
         /// </summary>
         /// <param name="product"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        [HttpPut("Product/IsActive/{id}")]
-        public async Task<IActionResult> IsActive(Guid id)
+        [HttpPut("ChangeStatus/{id}")]
+        public async Task<IActionResult> ChangeStatus([FromRoute] Guid id)
         {
-            try
-            {
-                if (id == Guid.Empty)
-                {
-                    return BadRequest("Produto vazio. Por favor, preencha todos os camposs");
-                }
-                else if (await _context.Product.AnyAsync(p => p.Id == id))
-                {
-                    Product product = await _context.Product.Where(p => p.Id == id).FirstAsync();
-
-                    product.IsActive = !product.IsActive;
-
-                    string result = product.IsActive == true ? "Ativado" : "Desativado";
-
-                    _context.Product.Update(product);
-                    int value = await _context.SaveChangesAsync();
-                   
-                    if(value == 1)
-                    {
-                        return Ok($"Produto foi {result} com Sucesso");
-                    }
-                    else
-                    {
-                        return BadRequest("Algo deu errado");
-                    }
-                }
-                else
-                {
-                    return BadRequest("Algo deu errado no banco");
-                }
-            }
-            catch(ArgumentException ae)
-            {
-                return NotFound(ae.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(MessageException.MessageBadRequest(ex));
-            }
+            return Ok(await _productService.ChangeStatus(id));
         }
         #endregion
     }
