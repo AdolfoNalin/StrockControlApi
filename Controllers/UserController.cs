@@ -16,6 +16,7 @@ namespace StockControlApi.Controllers
         }
 
         #region GetById
+        [HttpGet("ById/{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             return Ok(await _userService.GetById(id));
@@ -28,6 +29,7 @@ namespace StockControlApi.Controllers
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
+        [HttpGet("ByStatus/{value}")]
         public async Task<IActionResult> GetByStatus([FromRoute] bool value)
         {
             return Ok(await _userService.GetByStatus(value));
