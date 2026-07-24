@@ -20,11 +20,11 @@ namespace StockControlApi.Service
         /// </summary>
         /// <param name="id">Key for supplier</param>
         /// <returns></returns>
-        public async Task<IActionResult> ChangeStatus(Guid id)
+        public async Task<string> ChangeStatus(Guid id)
         {
             try
             {
-                Supplier supplier = _context.Supplier.Where(s =>  s.Id == id).FirstOrDefault()
+                Supplier supplier = _context.Supplier.Where(s => s.Id == id).FirstOrDefault()
                     ?? throw new NullReferenceException("Nenhum fornecedor encontrado");
 
                 supplier.Active = !supplier.Active;
@@ -34,15 +34,15 @@ namespace StockControlApi.Service
 
                 string status = supplier.Active == true ? "Ativado" : "Desativado";
 
-                return BadRequest($"Fornecedor {status} com êxito");
+                return $"Fornecedor {status} com êxito";
             }
-            catch(NullReferenceException nre)
+            catch (NullReferenceException nre)
             {
-                return NotFound(nre.Message);
+                throw nre;
             }
             catch (Exception ex)
             {
-                return BadRequest(MessageException.MessageBadRequest(ex));
+                throw ex;
             }
         }
         #endregion
@@ -55,7 +55,7 @@ namespace StockControlApi.Service
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public async Task<IActionResult> Create(Supplier supplier)
+        public async Task<string> Create(Supplier supplier)
         {
             try
             {
@@ -72,27 +72,27 @@ namespace StockControlApi.Service
                     _context.Supplier.Add(supplier);
                     int value = await _context.SaveChangesAsync();
 
-                    if(value == 1)
+                    if (value == 1)
                     {
-                        return Ok($"Fornecedor cadastrado com êxito");
+                        return $"Fornecedor cadastrado com êxito";
                     }
                     else
                     {
-                         return BadRequest($"Algo de errado");
+                        return $"Algo de errado";
                     }
                 }
             }
-            catch(ArgumentNullException ane)
+            catch (ArgumentNullException ane)
             {
-                return NotFound(ane.ParamName);
+                throw ane;
             }
-            catch(ArgumentException ae)
+            catch (ArgumentException ae)
             {
-                return NotFound(ae.Message);
+                throw ae;
             }
             catch (Exception ex)
             {
-                return BadRequest(MessageException.MessageBadRequest(ex));
+                throw ex;
             }
         }
         #endregion
@@ -102,13 +102,20 @@ namespace StockControlApi.Service
         /// Method responsible for Get all Suppliers
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> GetAll()
+        public async Task<List<Supplier>> GetAll()
         {
             try
             {
                 List<Supplier> suppliers = await _context.Supplier.OrderBy(s => s.Name).ToListAsync();
 
-                return Ok(suppliers);
+                if(suppliers.Count == 0)
+                    throw new ArgumentNullException("Nenhum fornecedor foi encontrado");
+
+                return suppliers;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw ane;
             }
             catch (Exception ex)
             {
@@ -123,22 +130,22 @@ namespace StockControlApi.Service
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<Supplier> GetById(Guid id)
         {
             try
             {
                 Supplier supplier = await _context.Supplier.Where(s => s.Id == id).FirstOrDefaultAsync()
                     ?? throw new NullReferenceException("Fornecedor não encontrado");
 
-                return Ok(supplier);
+                return supplier;
             }
-            catch(NullReferenceException are)
+            catch (NullReferenceException are)
             {
-                return NotFound(are.Message);
+                throw are;
             }
             catch (Exception ex)
             {
-                return BadRequest(MessageException.MessageBadRequest(ex));
+                throw ex;
             }
         }
         #endregion
@@ -149,25 +156,29 @@ namespace StockControlApi.Service
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public async Task<IActionResult> GetByStatus(bool value)
+        public async Task<List<Supplier>> GetByStatus(bool value)
         {
             try
             {
                 string status = value == true ? "Ativado" : "Desativado";
-                List <Supplier> suppliers = null;
+                List<Supplier> suppliers = null;
 
                 suppliers = await _context.Supplier.Where(s => s.Active == value).ToListAsync();
 
-                if(suppliers == null)
+                if (suppliers.Count == 0)
                 {
-                    return NotFound($"Não existe nenhum fornecedor com o status de {status}");
+                    throw new ArgumentNullException($"Não existe nenhum fornecedor com o status de {status}");
                 }
 
-                return Ok(suppliers);
+                return suppliers;
+            }
+            catch (ArgumentNullException ane)
+            {
+                throw ane;
             }
             catch (Exception ex)
             {
-                return BadRequest(MessageException.MessageBadRequest(ex));
+                throw ex;
             }
         }
         #endregion
@@ -180,33 +191,33 @@ namespace StockControlApi.Service
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public async Task<IActionResult> Update(Supplier supplier)
+        public async Task<string> Update(Supplier supplier)
         {
             try
             {
-                if(supplier == null)
+                if (supplier == null)
                 {
                     throw new ArgumentNullException(nameof(supplier), "Está vazio");
                 }
-                else if(await _context.Supplier.AnyAsync(s => s.Id == supplier.Id || s.Name.Equals(supplier.Name) || s.TrandName.Equals(supplier.TrandName)))
+                else if (await _context.Supplier.AnyAsync(s => s.Id == supplier.Id || s.Name.Equals(supplier.Name) || s.TrandName.Equals(supplier.TrandName)))
                 {
                     _context.Supplier.Update(supplier);
                     await _context.SaveChangesAsync();
 
-                    return Ok($"Forcenedor {supplier.TrandName} atualizado com êxito");
+                    return $"Forcenedor {supplier.TrandName} atualizado com êxito";
                 }
                 else
                 {
                     throw new ArgumentException("Fornecedor não existe!");
                 }
             }
-            catch(ArgumentNullException ane)
+            catch (ArgumentNullException ane)
             {
-                return NotFound(ane.ParamName);
+                throw ane;
             }
-            catch(ArgumentException ae)
+            catch (ArgumentException ae)
             {
-                return NotFound(ae.Message);
+                throw ae;
             }
             catch (Exception ex)
             {

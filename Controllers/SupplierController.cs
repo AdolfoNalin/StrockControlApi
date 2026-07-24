@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StockControlApi.Libiries;
 using StockControlApi.Models;
 using StockControlApi.Service;
 
@@ -20,10 +21,23 @@ namespace StockControlApi.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("All")]
         public async Task<IActionResult> GetAll()
         {
-           return Ok(await _supplierService.GetAll());
+            try
+            {
+                List<Supplier> list = await _supplierService.GetAll();
+
+                return Ok(list);
+            }
+            catch(ArgumentNullException ane)
+            {
+                return NotFound(ane.ParamName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
         }
         #endregion
 
@@ -33,10 +47,27 @@ namespace StockControlApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("ById/{id}")]
+        [HttpGet("ById/guid:{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
-            return Ok(await _supplierService.GetById(id));
+            try
+            {
+                if(Guid.Empty == id)
+                    throw new NullReferenceException("Identidade vazia");
+
+                Supplier supplier = await _supplierService.GetById(id) as Supplier
+                    ?? throw new ArgumentNullException("Nenhum Fornecedor encontrado");
+
+                return Ok(supplier);
+            }
+            catch(ArgumentNullException ane)
+            {
+                return NotFound(ane.ParamName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
         }
         #endregion
 
@@ -46,10 +77,23 @@ namespace StockControlApi.Controllers
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        [HttpGet("ByStatus/bool:{value}")]
+        [HttpGet("ByStatus/{value}")]
         public async Task<IActionResult> GetByStatus([FromRoute] bool value)
         {
-            return Ok(await _supplierService.GetByStatus(value));
+            try
+            {
+                List<Supplier> suppliers = await _supplierService.GetByStatus(value);
+
+                return Ok(suppliers);
+            }
+            catch(ArgumentNullException ane)
+            {
+                return NotFound(ane.ParamName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
         }
         #endregion
 
@@ -72,7 +116,7 @@ namespace StockControlApi.Controllers
         /// </summary>
         /// <param name="supplier"></param>
         /// <returns></returns>
-        [HttpPut]
+        [HttpPut("Update")]
         public async Task<IActionResult> Update([FromBody] Supplier supplier)
         {
             return Ok(await _supplierService.Update(supplier));
