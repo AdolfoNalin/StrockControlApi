@@ -64,7 +64,7 @@ namespace StockControlApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Product product)
         {
-            return Ok(await _productService.Post(product));
+            return Ok(await _productService.Create(product));
         }
         #endregion
 
@@ -78,7 +78,37 @@ namespace StockControlApi.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] Product product)
         {
-            return Ok(await _productService.Put(product));
+            return Ok(await _productService.Update(product));
+        }
+        #endregion
+        
+        #region UpdateStock
+        /// <summary>
+        /// Function responsible for update the product in database
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        [HttpPut]
+        public async Task<IActionResult> UpdateStock([FromQuery] Guid id, int stockQuantity)
+        {
+            try
+            {
+                bool value = await _productService.UpdateStock(productId: id, stockQuantity: stockQuantity);
+                return Ok(value);
+            }
+            catch(ArgumentNullException ane)
+            {
+                return NotFound(ane.ParamName);
+            }
+            catch(NullReferenceException nre)
+            {
+                return NotFound(nre.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
         }
         #endregion
 
