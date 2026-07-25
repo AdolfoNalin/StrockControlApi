@@ -126,13 +126,13 @@ namespace StockControlApi.Service
         }
         #endregion
 
-        #region Post
+        #region Create
         /// <summary>
         /// Function responsible for insert product in database
         /// </summary>
         /// <param name="product"></param>
         /// <returns></returns>
-        public async Task<string> Post(Product product)
+        public async Task<string> Create(Product product)
         {
             try
             {
@@ -181,14 +181,14 @@ namespace StockControlApi.Service
         }
         #endregion
 
-        #region Put
+        #region Update
         /// <summary>
         /// Function responsible for update the prudoct in database
         /// </summary>
         /// <param name="product"></param>
         /// <returns></returns>
         /// <exception cref="NullReferenceException"></exception>
-        public async Task<string> Put(Product product)
+        public async Task<string> Update(Product product)
         {
             try
             {
@@ -204,6 +204,46 @@ namespace StockControlApi.Service
             catch(NullReferenceException nre)
             {
                 throw nre;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
+
+        #region UpdateStock
+        /// <summary>
+        /// Function responsible for update stockQauntity
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public async Task<bool> UpdateStock(Guid productId, int stockQuantity)
+        {
+            try
+            {
+                if (productId == Guid.Empty)
+                    throw new NullReferenceException("Produto não encontrado.");
+
+                Product product = await _context.Product.FirstOrDefaultAsync(p => p.Id == productId)
+                    ?? throw new ArgumentNullException("Nenhum produto encontrado");
+
+                product.StockQuantity = stockQuantity;
+
+                _context.Product.Update(product);
+
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (NullReferenceException nre)
+            {
+                throw nre;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw ane;
             }
             catch (Exception ex)
             {
