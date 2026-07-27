@@ -21,7 +21,7 @@ namespace StockControlApi.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        [HttpGet("All")]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -47,7 +47,7 @@ namespace StockControlApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("ById/guid:{id}")]
+        [HttpGet("ById/{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             try
@@ -106,7 +106,24 @@ namespace StockControlApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Supplier supplier)
         {
-            return Ok(await _supplierService.Create(supplier));
+            try
+            {
+                string message = await _supplierService.Create(supplier);
+
+                return Ok(message);
+            }
+            catch(ArgumentNullException ane)
+            {
+                return NotFound(ane.ParamName);
+            }
+            catch(ArgumentException ae)
+            {
+                return NotFound(ae.ParamName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
         }
         #endregion
 
@@ -119,7 +136,23 @@ namespace StockControlApi.Controllers
         [HttpPut("Update")]
         public async Task<IActionResult> Update([FromBody] Supplier supplier)
         {
-            return Ok(await _supplierService.Update(supplier));
+            try
+            {
+                string message = await _supplierService.Update(supplier);
+                return Ok(message);
+            }
+            catch(ArgumentNullException ane)
+            {
+                return NotFound(ane.ParamName);
+            }
+            catch(ArgumentException ae)
+            {
+                return NotFound(ae.ParamName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
         }
         #endregion
 
@@ -132,7 +165,19 @@ namespace StockControlApi.Controllers
         [HttpPut("ChangeStatus/{id}")]
         public async Task<IActionResult> ChangeStatus([FromRoute] Guid id)
         {
-            return Ok(await _supplierService.ChangeStatus(id));
+            try
+            {
+                string message = await _supplierService.ChangeStatus(id);
+                return Ok(message);
+            }
+            catch(NullReferenceException nre)
+            {
+                return NotFound(nre.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
         }
         #endregion
     }
