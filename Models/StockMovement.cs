@@ -38,7 +38,6 @@ namespace StockControlApi.Models
         public string? Observation { get; set; }
 
         [Required(ErrorMessage = "O campo movimentação precisa de Data")]
-        [DataType(DataType.Date)]
         public DateTime MovementDate { get; set; } = DateTime.UtcNow;
 
         [JsonIgnore]
@@ -47,6 +46,6 @@ namespace StockControlApi.Models
 
         [JsonIgnore]
         [ForeignKey(nameof(UserId))]
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 }
