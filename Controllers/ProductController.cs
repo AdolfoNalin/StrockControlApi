@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using StockControlApi.Data;
 using StockControlApi.Libiries;
 using StockControlApi.Models;
 using StockControlApi.Service;
@@ -23,10 +21,22 @@ namespace StockControlApi.Controllers
         /// Function responsible for Get product Active or deasactivate in database
         /// </summary>
         /// <returns></returns>
-        [HttpGet("active/bool:{value}")]
+        [HttpGet("ByStatus/{value}")]
         public async Task<IActionResult> GetByStatus([FromRoute] bool value)
         {
-            return Ok(await _productService.GetByStatus(value));
+            try
+            {
+                List<Product> products = await _productService.GetByStatus(value);
+                return Ok(products);
+            }
+            catch(ArgumentNullException ane)
+            {
+                return NotFound(ane.ParamName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
         }
         #endregion
 
@@ -38,7 +48,20 @@ namespace StockControlApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _productService.GetAll());
+            try
+            {
+                List<Product> products = await _productService.GetAll();
+                
+                return Ok(products);
+            }
+            catch(ArgumentNullException ane)
+            {
+                return NotFound(ane.ParamName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
         }
         #endregion
 
@@ -47,10 +70,23 @@ namespace StockControlApi.Controllers
         /// Function responsible for Get product in database
         /// </summary>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("ById/{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
-            return Ok(await _productService.GetById(id));
+            try
+            {
+                Product product = await _productService.GetById(id);
+
+                return Ok(product);
+            }
+            catch(ArgumentNullException ane)
+            {
+                return NotFound(ane.ParamName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
         }
         #endregion
 
@@ -64,7 +100,24 @@ namespace StockControlApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Product product)
         {
-            return Ok(await _productService.Create(product));
+            try
+            {
+                string message = await _productService.Create(product);
+
+                return Ok(message);
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw ane;
+            }
+            catch(ArgumentException ae)
+            {
+                throw ae;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         #endregion
 
@@ -78,7 +131,19 @@ namespace StockControlApi.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] Product product)
         {
-            return Ok(await _productService.Update(product));
+            try
+            {
+                string message = await _productService.Update(product);
+                return Ok(message);
+            }
+            catch(NullReferenceException nre)
+            {
+                return NotFound(nre.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
         }
         #endregion
         
@@ -89,7 +154,7 @@ namespace StockControlApi.Controllers
         /// <param name="product"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        [HttpPut]
+        [HttpPut("UpdateStock")]
         public async Task<IActionResult> UpdateStock([FromQuery] Guid id, int stockQuantity)
         {
             try
@@ -122,7 +187,20 @@ namespace StockControlApi.Controllers
         [HttpPut("ChangeStatus/{id}")]
         public async Task<IActionResult> ChangeStatus([FromRoute] Guid id)
         {
-            return Ok(await _productService.ChangeStatus(id));
+            try
+            {
+                string message = await _productService.ChangeStatus(id);
+
+                return Ok(message);
+            }
+            catch (ArgumentNullException ane)
+            {
+                throw ane;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         #endregion
     }
