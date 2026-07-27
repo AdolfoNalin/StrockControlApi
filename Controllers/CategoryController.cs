@@ -38,7 +38,7 @@ namespace StockControlApi.Controllers
         #endregion
 
         #region GetById 
-        [HttpGet("ById/guid:{id}")]
+        [HttpGet("ById/{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             try
@@ -63,7 +63,7 @@ namespace StockControlApi.Controllers
         #endregion
 
         #region GetByStatus
-        [HttpGet("ByStatus/bool:{value}")]
+        [HttpGet("ByStatus/{value}")]
         public async Task<IActionResult> GetByStatus([FromRoute] bool value)
         {
             try
@@ -75,10 +75,6 @@ namespace StockControlApi.Controllers
             catch (ArgumentNullException ane)
             {
                 return NotFound(ane.ParamName);
-            }
-            catch(ArgumentException ae)
-            {
-                return NotFound($"{ae.Message}");
             }
             catch (Exception ex)
             {
@@ -138,7 +134,7 @@ namespace StockControlApi.Controllers
         #endregion
 
         #region ChangeStatus
-        [HttpPut]
+        [HttpPut("ChangeStatus/{id}")]
         public async Task<IActionResult> ChangeStatus([FromRoute] Guid id)
         {
             try
