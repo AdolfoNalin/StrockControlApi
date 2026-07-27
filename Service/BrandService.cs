@@ -66,9 +66,13 @@ namespace StockControlApi.Service
                 else
                 {
                     await _context.Brand.AddAsync(brand);
-                    await _context.SaveChangesAsync();
+                    int value = await _context.SaveChangesAsync();
 
-                    return $"Marca {brand.Name} foi cadastrado com êxito";
+                    if (value == 1)
+                        return $"Marca {brand.Name} foi cadastrado com êxito";
+                    else
+                        return "Algo deu errado";
+
                 }
             }
             catch (ArgumentNullException ane)
@@ -100,7 +104,7 @@ namespace StockControlApi.Service
 
                 if(brands.Count == 0)
                 {
-                    throw new ArgumentException("Nenhuma Marca foi encontrada");
+                    throw new ArgumentNullException("Nenhuma Marca foi encontrada");
                 }
                 else
                 {
@@ -160,15 +164,19 @@ namespace StockControlApi.Service
             {
                 List<Brand> brands = await _context.Brand.Where(b => b.Active == value).ToListAsync();
 
-                if(brands.Count == 0)
+                if (brands.Count == 0)
                 {
                     string status = value == true ? "Ativado" : "Desativado";
-                    throw new ArgumentNullException($"Nenhum marca com statatus {status} foi encontrado");
+                    throw new ArgumentNullException($"Nenhum marca com status {status} foi encontrado");
                 }
                 else
                 {
                     return brands;
                 }
+            }
+            catch (ArgumentNullException ane)
+            {
+                throw ane;
             }
             catch (Exception ex)
             {
