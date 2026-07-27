@@ -38,7 +38,7 @@ namespace StockControlApi.Models
         public string? Phone { get; set; }
 
         [Required(ErrorMessage = "O campo Celular está vazio")]
-        [StringLength(18, MinimumLength = 18)]
+        [StringLength(15, MinimumLength = 15)]
         public string? CellPhone { get; set; }
 
         [MaxLength(100)]
