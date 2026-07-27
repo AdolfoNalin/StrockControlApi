@@ -38,20 +38,16 @@ namespace StockControlApi.Models
         public string Description { get; set; }
 
         [Required(ErrorMessage = "O campo Quantidade está vazio")]
-        [Range(1, int.MaxValue)]
         public int StockQuantity { get; set; }
 
         [Required(ErrorMessage = "O campo Quantidade está vazio")]
-        [Range(1, int.MaxValue, ErrorMessage = $"Máximo é {nameof(int.MaxValue)}, valor minimo 1")]
         public int MinimumStock { get; set; }
 
         [Required(ErrorMessage = "O campo preço de compra está vazio")]
-        [Range(typeof(Decimal), "0.01", "999999999")]
         [Column(TypeName = "decimal(10,2)")]
         public decimal BuyPrice { get; set; }
 
         [Required(ErrorMessage = "O campo preço de venda está vazio")]
-        [Range(typeof(Decimal), "0.01", "999999999")]
         [Column(TypeName = "decimal(10,2)")]
         public decimal SalePrice { get; set; }
 
@@ -85,7 +81,7 @@ namespace StockControlApi.Models
 
         [JsonIgnore]
         [ForeignKey(nameof(CategoryId))]
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
 
         [JsonIgnore]
         [ForeignKey(nameof(SupplierId))]
