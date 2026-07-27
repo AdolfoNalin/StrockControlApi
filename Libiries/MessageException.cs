@@ -10,7 +10,7 @@
         /// <returns>String format</returns>
         public static string MessageBadRequest(Exception ex)
         {
-            return $"{ex.Message}, {ex.StackTrace}, {ex.HelpLink}";
+            return $"{ex.Message}, {ex.InnerException?.Message}, {ex.HelpLink}";
         }
         #endregion
     }
