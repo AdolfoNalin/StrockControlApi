@@ -45,7 +45,7 @@ namespace StockControlApi.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        [HttpGet("ById/guid:{id}")]
+        [HttpGet("ById/{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             try
@@ -64,12 +64,12 @@ namespace StockControlApi.Controllers
         }
         #endregion
 
-        #region GetAll
+        #region GetByStatus
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        [HttpGet("ByStatus/bool:{value}")]
+        [HttpGet("ByStatus/{value}")]
         public async Task<IActionResult> GetbySatus([FromRoute] bool value)
         {
             try
@@ -137,7 +137,7 @@ namespace StockControlApi.Controllers
         #endregion
 
         #region ChangeStatus
-        [HttpPut("ChangeStatus/guid:{id}")]
+        [HttpPut("ChangeStatus/{id}")]
         public async Task<IActionResult> ChangeStatus([FromRoute] Guid id)
         {
             try
