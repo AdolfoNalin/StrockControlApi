@@ -34,7 +34,7 @@ namespace StockControlApi.Service
                     if (value == 1)
                     {
                         string status = category.Active == true ? "Ativada" : "Desativada";
-                        return $"Categpria {category.Name} foi {status} com êxito";
+                        return $"Categoria {category.Name} foi {status} com êxito";
                     }
                     else
                     {
@@ -143,10 +143,12 @@ namespace StockControlApi.Service
         {
             try
             {
-                List<Category> list = await _context.Category.Where(c => c.Active == value).OrderBy(c => c.Name).ToListAsync()
-                   ?? throw new ArgumentNullException("Nenhuma categoria encontrada");
+                List<Category> list = await _context.Category.Where(c => c.Active == value).OrderBy(c => c.Name).ToListAsync();
 
-                return list;
+                if(list.Count == 0)
+                   throw new ArgumentNullException("Nenhuma categoria encontrada");
+                else
+                    return list;
             }
             catch (ArgumentNullException ane)
             {
