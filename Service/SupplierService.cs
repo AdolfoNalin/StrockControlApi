@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StockControlApi.Data;
-using StockControlApi.Libiries;
 using StockControlApi.Models;
 
 namespace StockControlApi.Service

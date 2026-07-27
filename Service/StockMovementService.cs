@@ -5,7 +5,7 @@ using StockControlApi.Models;
 
 namespace StockControlApi.Service
 {
-    public class StockMovementService : ControllerBase, IStockMovement
+    public class StockMovementService : ControllerBase, IStockMovementService
     {
         private readonly ApiStockControlContext _context;
 
