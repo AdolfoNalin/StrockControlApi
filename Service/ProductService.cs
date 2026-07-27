@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using StockControlApi.Data;
-using StockControlApi.Libiries;
 using StockControlApi.Models;
 
 namespace StockControlApi.Service
@@ -26,7 +24,17 @@ namespace StockControlApi.Service
             {
                 List<Product> products = await _context.Product.Where(p => p.IsActive == value).ToListAsync();
 
-                return products;
+                if (products.Count == 0)
+                {
+                    string status = value == true ? "Ativado" : "Desativado";
+                    throw new ArgumentNullException("Nenhum produto com o status {status} foi encontrado");
+                }
+                else
+                    return products;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw ane;
             }
             catch (Exception ex)
             {
@@ -45,7 +53,15 @@ namespace StockControlApi.Service
             try
             {
                 List<Product> products = await _context.Product.OrderBy(p => p.Description).ToListAsync();
-                return products;
+
+                if (products.Count == 0)
+                    throw new ArgumentNullException("Nenhum produto encontrado");
+                else
+                    return products;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw ane;
             }
             catch (Exception ex)
             {
@@ -65,9 +81,14 @@ namespace StockControlApi.Service
         {
             try
             {
-                Product product = await _context.Product.Where(p => p.Id == id).FirstOrDefaultAsync();
+                Product product = await _context.Product.FirstOrDefaultAsync(p => p.Id == id)
+                    ?? throw new ArgumentNullException("Nenhum peroduto foi encontrado");
 
                 return product;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw ane;
             }
             catch (Exception ex)
             {
