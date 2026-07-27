@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StockControlApi.Libiries;
 using StockControlApi.Models;
 using StockControlApi.Service;
 
 namespace StockControlApi.Controllers
 {
     [ApiController]
-    [Route("[Controller]")]
+    [Route("api/[Controller]")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -19,7 +20,20 @@ namespace StockControlApi.Controllers
         [HttpGet("ById/{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
-            return Ok(await _userService.GetById(id));
+            try
+            {
+                List<User> users = await _userService.GetAll();
+
+                return Ok(users);
+            }
+            catch (ArgumentException ae)
+            {
+                return NotFound(ae.ParamName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
         }
         #endregion
 
@@ -32,7 +46,20 @@ namespace StockControlApi.Controllers
         [HttpGet("ByStatus/{value}")]
         public async Task<IActionResult> GetByStatus([FromRoute] bool value)
         {
-            return Ok(await _userService.GetByStatus(value));
+            try
+            {
+                List<User> users = await _userService.GetByStatus(value);
+
+                return Ok(users);
+            }
+            catch (ArgumentException ae)
+            {
+                return NotFound(ae.ParamName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
         }
         #endregion
 
@@ -44,7 +71,24 @@ namespace StockControlApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-           return Ok(await _userService.GetAll());
+            try
+            {
+                List<User> users = await _userService.GetAll();
+
+                return Ok(users);
+            }
+            catch(NullReferenceException nre)
+            {
+                return NotFound(nre.Message);
+            }
+            catch(ArgumentException ae)
+            {
+                return NotFound(ae.ParamName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
         }
         #endregion
 
@@ -57,7 +101,47 @@ namespace StockControlApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] User user)
         {
-           return Ok(await _userService.Create(user));
+            try
+            {
+                string message = await _userService.Create(user);
+                return Ok(message);
+            }
+            catch(NullReferenceException are)
+            {
+                return NotFound(are.Message);
+            }
+            catch(ArgumentException ae)
+            {
+                return NotFound(ae.ParamName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
+        }
+        #endregion
+
+        #region Login
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] UserLogin login)
+        {
+            try
+            {
+                UserResponse response = await _userService.Login(login);
+                return Ok(response);
+            }
+            catch(ArgumentNullException ane)
+            {
+                return NotFound(ane.ParamName);
+            }
+            catch(ArgumentException ae)
+            {
+                return NotFound(ae.ParamName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
         }
         #endregion
 
@@ -70,7 +154,19 @@ namespace StockControlApi.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] User user)
         {
-            return Ok(await _userService.Update(user));
+            try
+            {
+                string result = await _userService.Update(user);
+                return Ok(result);
+            }
+            catch(NullReferenceException nre)
+            {
+                return NotFound(nre.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
         }
         #endregion
 
@@ -80,10 +176,23 @@ namespace StockControlApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPut("IsActive/{id}")]
+        [HttpPut("ChangeStatus/{id}")]
         public async Task<IActionResult> ChangeStatus([FromRoute] Guid id)
         {
-           return Ok(await _userService.ChangeStatus(id));
+            try
+            {
+                string result = await _userService.ChangeStatus(id);
+
+                return Ok(result);
+            }
+            catch(NullReferenceException nre)
+            {
+                return NotFound(nre.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(MessageException.MessageBadRequest(ex));
+            }
         }
         #endregion
     }
