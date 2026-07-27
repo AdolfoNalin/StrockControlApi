@@ -7,11 +7,11 @@ namespace StockControlApi.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    public class StockController : ControllerBase
+    public class StockMovementController : ControllerBase
     {
-        private readonly IStockMovement _stockMovement;
+        private readonly IStockMovementService _stockMovement;
 
-        public StockController(IStockMovement stockMovement)
+        public StockMovementController(IStockMovementService stockMovement)
         {
             _stockMovement = stockMovement;
         }
@@ -37,7 +37,7 @@ namespace StockControlApi.Controllers
         #endregion
 
         #region GetById
-        [HttpGet("ById/guid:{id}")]
+        [HttpGet("ById/{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             try
@@ -57,7 +57,7 @@ namespace StockControlApi.Controllers
         #endregion
 
         #region GetByProductId
-        [HttpGet("ByIdProduct/guid:{id}")]
+        [HttpGet("ByProductId/{id}")]
         public async Task<IActionResult> GetByProductId([FromRoute] Guid id)
         {
             try
@@ -141,7 +141,7 @@ namespace StockControlApi.Controllers
         }
         #endregion
 
-        #region Create
+        #region Update
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] StockMovement stockMovement)
         {
