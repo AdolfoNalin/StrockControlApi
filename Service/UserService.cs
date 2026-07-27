@@ -3,14 +3,18 @@ using Microsoft.EntityFrameworkCore;
 using StockControlApi.Data;
 using StockControlApi.Libiries;
 using StockControlApi.Models;
+using StockControlApi.Services;
+using System.Reflection.Metadata;
 
 namespace StockControlApi.Service
 {
     public class UserService : ControllerBase, IUserService
     {
         private readonly ApiStockControlContext _context;
-        public UserService(ApiStockControlContext context)
+        private readonly TokenService _tokenService;
+        public UserService(ApiStockControlContext context, TokenService service)
         {
+            _tokenService = service;
             _context = context;
         }
 
@@ -43,11 +47,11 @@ namespace StockControlApi.Service
             }
             catch (NullReferenceException nre)
             {
-                return nre.Message;
+                throw nre;
             }
             catch (Exception ex)
             {
-                return MessageException.MessageBadRequest(ex);
+                throw ex;
             }
         }
         #endregion
@@ -63,7 +67,14 @@ namespace StockControlApi.Service
             {
                 List<User> users = await _context.User.OrderBy(u => u.Name).ToListAsync();
 
-                return users;
+                if (users.Count == 0)
+                    throw new ArgumentNullException("Nenhum usuário encontrado");
+                else
+                    return users;
+            }
+            catch (ArgumentNullException nre)
+            {
+                throw nre;
             }
             catch (Exception ex)
             {
@@ -86,7 +97,7 @@ namespace StockControlApi.Service
 
                 return user;
             }
-            catch(ArgumentNullException ane)
+            catch (ArgumentNullException ane)
             {
                 throw ane;
             }
@@ -107,12 +118,14 @@ namespace StockControlApi.Service
         {
             try
             {
-                List<User> users = await _context.User.Where(u => u.Active == value).OrderBy(u => u.Name).ToListAsync()
-                    ?? throw new ArgumentNullException("Nenhum usuário foi encontrado");
+                List<User> users = await _context.User.Where(u => u.Active == value).OrderBy(u => u.Name).ToListAsync();
 
-                return users;
+                if (users.Count == 0)
+                    throw new ArgumentNullException("Nenhum usuário foi encontrado");
+                else
+                    return users;
             }
-            catch(ArgumentNullException ane)
+            catch (ArgumentNullException ane)
             {
                 throw ane;
             }
@@ -151,15 +164,15 @@ namespace StockControlApi.Service
             }
             catch (ArgumentException ae)
             {
-                return ae.ParamName;
+                throw ae;
             }
             catch (NullReferenceException nre)
             {
-                return nre.Message;
+                throw nre;
             }
             catch (Exception ex)
             {
-                return MessageException.MessageBadRequest(ex);
+                throw ex;
             }
         }
         #endregion
@@ -183,7 +196,10 @@ namespace StockControlApi.Service
                     _context.User.Update(user);
                     int value = await _context.SaveChangesAsync();
 
-                    return "Usuário foi cadastrado com sucesso";
+                    if (value == 1)
+                        return "Usuário foi cadastrado com sucesso";
+                    else
+                        return "Algo deu Errado";
                 }
                 else
                 {
@@ -197,6 +213,56 @@ namespace StockControlApi.Service
             catch (Exception ex)
             {
                 return MessageException.MessageBadRequest(ex);
+            }
+        }
+        #endregion
+
+        #region Login
+        public async Task<UserResponse> Login(UserLogin login)
+        {
+            try
+            {
+                if (login == null)
+                    throw new ArgumentNullException("Preencha todos os campos");
+                else
+                {
+                    User user = await _context.User.FirstOrDefaultAsync(u => u.Name.Contains(login.Login));
+
+
+                    if (user == null)
+                        throw new ArgumentNullException("Login incorreto");
+                    else
+                    {
+                        if (user.PasswordHash.Equals(login.PasswordHass))
+                        {
+                            string token = _tokenService.GenerateToken(user);
+                            UserResponse response = new UserResponse()
+                            {
+                                UserId = user.Id,
+                                Login = user.Name,
+                                Token = token
+                            };
+
+                            return response;
+                        }
+                        else
+                        {
+                            throw new ArgumentException("Senha inválida");
+                        }
+                    }
+                }
+            }
+            catch (ArgumentNullException ane)
+            {
+                throw ane;
+            }
+            catch (ArgumentException ae)
+            {
+                throw ae;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
         #endregion
