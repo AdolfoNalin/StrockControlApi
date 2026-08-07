@@ -76,13 +76,13 @@ namespace StockControlApi.Controllers
         }
         #endregion
 
-        #region GetSmartSearch
-        [HttpGet("SmartSeach")]
-        public async Task<IActionResult> GetSmartSearch([FromQuery] string value)
+        #region GetByMovementType
+        [HttpGet("ByMovementType")]
+        public async Task<IActionResult> GetByMovementType([FromQuery] MovimentType value)
         {
             try
             {
-                List<StockMovement> stockMovements = await _stockMovement.GetSmartSearch(value);
+                List<StockMovement> stockMovements = await _stockMovement.GetByMovementType(value);
                 return Ok(stockMovements);
             }
             catch (ArgumentNullException ane)
