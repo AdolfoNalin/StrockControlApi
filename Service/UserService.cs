@@ -233,7 +233,7 @@ namespace StockControlApi.Service
                         throw new ArgumentNullException("Login incorreto");
                     else
                     {
-                        if (user.PasswordHash.Equals(login.PasswordHass))
+                        if (user.PasswordHash.Equals(login.PasswordHash))
                         {
                             string token = _tokenService.GenerateToken(user);
                             UserResponse response = new UserResponse()
