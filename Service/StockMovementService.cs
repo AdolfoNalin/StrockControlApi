@@ -147,12 +147,12 @@ namespace StockControlApi.Service
         }
         #endregion
 
-        #region GetSmartSearch
-        public async Task<List<StockMovement>> GetSmartSearch(string value)
+        #region GetByMovementType
+        public async Task<List<StockMovement>> GetByMovementType(MovimentType value)
         {
             try
             {
-                List<StockMovement> list = await _context.StockMovement.Where(s => s.Product.Description.ToUpper().Contains(value.ToUpper())).OrderBy(s => s.MovementDate).ToListAsync();
+                List<StockMovement> list = await _context.StockMovement.Where(s => s.MovimentType == value).OrderBy(s => s.MovementDate).ToListAsync();
 
                 if (list.Count == 0)
                     throw new ArgumentNullException("Nenhuma movimentação foi encontrada");
