@@ -8,7 +8,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("ConnectionPostgres");
+var connectionString = builder.Configuration.GetConnectionString("ConnectionString");
 builder.Services.AddDbContext<ApiStockControlContext>(options => options.UseNpgsql(connectionString));
 
 // Adiciona suporte aos Controllers
