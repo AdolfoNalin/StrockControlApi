@@ -6,7 +6,7 @@ using StockControlApi.Service;
 namespace StockControlApi.Controllers
 {
     [ApiController]
-    [Route("api/[Controller]")]
+    [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
