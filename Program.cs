@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApiStockControlContext>(options =>
     options.UseNpgsql(
-        builder.Configuration.GetConnectionString("ConnectionString")
+        builder.Configuration.GetConnectionString("DefaultConnection")
     ));
 
 //var connectionString = builder.Configuration.GetConnectionString("ConnectionString");
