@@ -32,7 +32,6 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("key").Get<string>());
 
-
 builder.Services.AddAuthentication(
     x =>
     {
@@ -73,5 +72,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGet("/", () => "API funcionando!");
 
 app.Run(); ;
