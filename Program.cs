@@ -8,8 +8,13 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("ConnectionString");
-builder.Services.AddDbContext<ApiStockControlContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<ApiStockControlContext>(options =>
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("ConnectionString")
+    ));
+
+//var connectionString = builder.Configuration.GetConnectionString("ConnectionString");
+//builder.Services.AddDbContext<ApiStockControlContext>(options => options.UseNpgsql(connectionString));
 
 // Adiciona suporte aos Controllers
 builder.Services.AddControllers();
