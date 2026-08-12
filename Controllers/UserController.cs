@@ -22,9 +22,9 @@ namespace StockControlApi.Controllers
         {
             try
             {
-                List<User> users = await _userService.GetAll();
+                User user = await _userService.GetById(id);
 
-                return Ok(users);
+                return Ok(user);
             }
             catch (ArgumentException ae)
             {
