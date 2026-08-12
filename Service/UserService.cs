@@ -231,6 +231,8 @@ namespace StockControlApi.Service
 
                     if (user == null)
                         throw new ArgumentNullException("Login incorreto");
+                    else if(user.Active == false)
+                        throw new ArgumentException("Usuário está Desativado");
                     else
                     {
                         if (user.PasswordHash.Equals(login.PasswordHash))
