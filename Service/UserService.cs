@@ -240,7 +240,7 @@ namespace StockControlApi.Service
                             string token = _tokenService.GenerateToken(user);
                             UserResponse response = new UserResponse()
                             {
-                                UserId = user.Id,
+                                Id = user.Id,
                                 Login = user.Name,
                                 Token = token
                             };
