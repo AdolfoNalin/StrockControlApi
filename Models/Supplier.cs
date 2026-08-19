@@ -54,7 +54,6 @@ namespace StockControlApi.Models
         [Required(ErrorMessage = "O campo de Data está vazio")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        [Required(ErrorMessage = "O campo de Data está vazio")]
         public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 
         [JsonIgnore]
