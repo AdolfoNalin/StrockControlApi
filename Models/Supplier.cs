@@ -23,11 +23,11 @@ namespace StockControlApi.Models
         public string? TrandName { get; set; }
 
         [Required(ErrorMessage = "CNPJ é obrigatório")]
-        [StringLength(14, MinimumLength = 14)]
+        [StringLength(18, MinimumLength = 18)]
         [RegularExpression(@"^\d{14}$")]
         public string Cnpj { get; set; }
 
-        [StringLength(14, MinimumLength = 14)]
+        [StringLength(15, MinimumLength = 15)]
         public string? StateRegistration { get; set; }
 
         [EmailAddress]
