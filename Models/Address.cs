@@ -2,6 +2,7 @@
 
 namespace StockControlApi.Models
 {
+    [NotMapped]
     public class Address
     {
         public string Street { get; set; } = string.Empty;
