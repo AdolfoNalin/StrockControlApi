@@ -30,7 +30,7 @@ namespace StockControlApi.Models
         public Guid CategoryId { get; set; }
 
         [Required(ErrorMessage = "Código interno não foi incrementado")]
-        public int InternalCode { get; set; }
+        public int? InternalCode { get; set; }
 
         [Required(ErrorMessage = "O campo descrição está vazio")]
         [MaxLength(100, ErrorMessage = "A quantidade máxima de caracteris já foi excedida")]
