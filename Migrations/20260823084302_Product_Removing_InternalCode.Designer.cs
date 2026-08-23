@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StockControlApi.Data;
@@ -11,9 +12,11 @@ using StockControlApi.Data;
 namespace StockControlApi.Migrations
 {
     [DbContext(typeof(ApiStockControlContext))]
-    partial class ApiStockControlContextModelSnapshot : ModelSnapshot
+    [Migration("20260823084302_Product_Removing_InternalCode")]
+    partial class Product_Removing_InternalCode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

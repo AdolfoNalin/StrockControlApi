@@ -15,7 +15,6 @@ namespace StockControlApi.Models
         Package
     }
 
-    [Index(nameof(InternalCode), IsUnique = true)]
     public class Product
     {
         [Key]
@@ -28,9 +27,6 @@ namespace StockControlApi.Models
         public Guid SupplierId { get; set; }
 
         public Guid CategoryId { get; set; }
-
-        [Required(ErrorMessage = "Código interno não foi incrementado")]
-        public int? InternalCode { get; set; }
 
         [Required(ErrorMessage = "O campo descrição está vazio")]
         [MaxLength(100, ErrorMessage = "A quantidade máxima de caracteris já foi excedida")]
