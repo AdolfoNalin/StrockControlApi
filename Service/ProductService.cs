@@ -233,7 +233,7 @@ namespace StockControlApi.Service
         }
         #endregion
 
-        #region UpdateStock
+        #region UpdateStock        
         /// <summary>
         /// Function responsible for update stockQauntity
         /// </summary>
@@ -265,6 +265,31 @@ namespace StockControlApi.Service
             catch(ArgumentNullException ane)
             {
                 throw ane;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
+    
+        #region GetSmart
+        public async Task<List<Product>> GetSmart(string value)
+        {
+            try
+            {
+                List<Product> products = new List<Product>();
+
+                if(String.IsNullOrEmpty(value))
+                {
+                    products = await _context.Product.OrderBy(p => p.Description).ToListAsync();
+                } 
+                else
+                {
+                    products = await _context.Product.Where<Product>(p => p.Description.ToUpper().Contains(value.ToUpper())).ToListAsync();
+                }
+
+                return products;
             }
             catch (Exception ex)
             {

@@ -11,5 +11,6 @@ namespace StockControlApi.Service
         public Task<String> Update(Product product);
         public Task<bool> UpdateStock(Guid productId, int stockQuantity);
         public Task<String> ChangeStatus(Guid id);
+        public Task<List<Product>> GetSmart(String value);
     }
 }

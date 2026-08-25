@@ -203,5 +203,22 @@ namespace StockControlApi.Controllers
             }
         }
         #endregion
+    
+        #region GetSmart
+        [HttpGet("Smart")]
+        public async Task<IActionResult> GetSmart([FromQuery] string value)
+        {
+            try
+            {
+                List<Product> products = await _productService.GetSmart(value);
+
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
     }
 }
