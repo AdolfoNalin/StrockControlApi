@@ -220,5 +220,23 @@ namespace StockControlApi.Controllers
             }
         }
         #endregion
+    
+        #region GetByDate
+        [HttpGet("ByDate")]
+        public async Task<IActionResult> GetByDate([FromQuery] DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                List<Product> products = await _productService.GetByDate(startDate, endDate);
+
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
+
     }
 }

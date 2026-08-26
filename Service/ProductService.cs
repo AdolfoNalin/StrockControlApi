@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel;
+using Microsoft.EntityFrameworkCore;
 using StockControlApi.Data;
 using StockControlApi.Models;
 
@@ -12,6 +13,28 @@ namespace StockControlApi.Service
         {
             _context = context;
         }
+
+        #region GetByDate
+        public async Task<List<Product>> GetByDate(DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                List<Product> products = await _context.Product.Where(p => p.CreatedAt.Date.Date == startDate.Date.Date &&
+                p.CreatedAt.Date.Date == endDate.Date.Date).ToListAsync() 
+                ?? throw new ArgumentNullException("Nenhum data encontrada neste período");
+
+                return products;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw ane;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
 
         #region GetByStatus
         /// <summary>
