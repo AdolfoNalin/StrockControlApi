@@ -19,8 +19,10 @@ namespace StockControlApi.Service
         {
             try
             {
-                List<Product> products = await _context.Product.Where(p => p.CreatedAt.Date.ToFileTimeUtc() == startDate.Date.ToFileTimeUtc() &&
-                p.CreatedAt.Date.ToFileTimeUtc() == endDate.Date.ToFileTimeUtc()).ToListAsync() 
+                string start = startDate.Date.Date.ToString("yyyy/MM/dd");
+                string end = endDate.Date.Date.ToString("yyyy/MM/dd");
+
+                List<Product> products = await _context.Product.Where(p => p.CreatedAt.Date.Date.Equals(start) && p.CreatedAt.Date.Date.Equals(end)).ToListAsync() 
                 ?? throw new ArgumentNullException("Nenhum data encontrada neste período");
 
                 return products;
