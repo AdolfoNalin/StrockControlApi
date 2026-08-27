@@ -5,7 +5,7 @@ namespace StockControlApi.Service
     public interface IProductService
     {
         public Task<List<Product>> GetAll();
-        public Task<List<Product>> GetByDate(DateTime starDate, DateTime endDate);
+        public Task<List<Product>> GetByDate(DateTime startDate, DateTime endDate);
         public Task<List<Product>> GetByStatus(bool value);
         public Task<Product> GetById(Guid id);
         public Task<String> Create (Product product);
