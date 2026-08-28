@@ -19,8 +19,8 @@ namespace StockControlApi.Service
         {
             try
             {
-                DateTime start = DateTime.FromFileTimeUtc(long.Parse(startDate.Date.ToString()));
-                DateTime end = DateTime.FromFileTimeUtc(long.Parse(endDate.Date.ToString()));
+                DateTime start = DateTime.FromFileTimeUtc(long.Parse(startDate.Date.Date.ToString()));
+                DateTime end = DateTime.FromFileTimeUtc(long.Parse(endDate.Date.Date.ToString()));
 
                 List<Product> products = await _context.Product
                     .Where(p => p.CreatedAt.Date >= start.Date && p.CreatedAt.Date <= end.Date)
