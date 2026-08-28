@@ -17,13 +17,17 @@ namespace StockControlApi.Service
         #region GetByDate
         public async Task<List<Product>> GetByDate(DateTime startDate, DateTime endDate)
         {
-            try
+          try
             {
-                string start = startDate.Date.Date.ToString("yyyy-MM-dd");
-                string end = endDate.Date.Date.ToString("yyyy-MM-dd");
+                DateTime start = startDate.Date;
+                DateTime end = endDate.Date;
 
-                List<Product> products = await _context.Product.Where(p => p.CreatedAt.Date.Date.Equals(start) && p.CreatedAt.Date.Date.Equals(end)).ToListAsync() 
-                ?? throw new ArgumentNullException("Nenhum data encontrada neste período");
+                List<Product> products = await _context.Product
+                    .Where(p => p.CreatedAt.Date >= start && p.CreatedAt.Date <= end)
+                    .ToListAsync();
+
+                if (products == null || products.Count == 0)
+                    throw new ArgumentNullException("Nenhum dado encontrado neste período");
 
                 return products;
             }
