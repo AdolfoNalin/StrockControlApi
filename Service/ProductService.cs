@@ -17,13 +17,13 @@ namespace StockControlApi.Service
         #region GetByDate
         public async Task<List<Product>> GetByDate(DateTime startDate, DateTime endDate)
         {
-          try
+            try
             {
-                DateTime start = startDate.Date;
-                DateTime end = endDate.Date;
+                DateTime start = DateTime.FromFileTimeUtc(long.Parse(startDate.Date.ToString()));
+                DateTime end = DateTime.FromFileTimeUtc(long.Parse(endDate.Date.ToString()));
 
                 List<Product> products = await _context.Product
-                    .Where(p => p.CreatedAt.Date >= start && p.CreatedAt.Date <= end)
+                    .Where(p => p.CreatedAt.Date >= start.Date && p.CreatedAt.Date <= end.Date)
                     .ToListAsync();
 
                 if (products == null || products.Count == 0)
