@@ -231,9 +231,13 @@ namespace StockControlApi.Controllers
 
                 return Ok(products);
             }
+            catch(ArgumentNullException ane)
+            {
+                return NotFound(ane.ParamName);
+            }
             catch (Exception ex)
             {
-                throw ex;
+                return BadRequest(MessageException.MessageBadRequest(ex));
             }
         }
         #endregion
