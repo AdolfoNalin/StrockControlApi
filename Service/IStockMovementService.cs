@@ -8,7 +8,7 @@ namespace StockControlApi.Service
         public Task<StockMovement> GetById(Guid id);
         public Task<List<StockMovement>> GetByProductId(Guid id);
         public Task<List<StockMovement>> GetByMovementType(MovimentType value);
-        public Task<List<StockMovement>> GetByDate(DateTime? startDate, DateTime? endDate);
+        public Task<List<StockMovement>> GetByDate(DateOnly? startDate, DateOnly? endDate);
         public Task<bool> Create(StockMovement stockMovement);
         public Task<bool> Update(StockMovement stockMovement);
     }

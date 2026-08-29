@@ -68,7 +68,7 @@ namespace StockControlApi.Service
         #endregion
 
         #region GetByDate
-        public async Task<List<StockMovement>> GetByDate(DateTime? startDate, DateTime? endDate)
+        public async Task<List<StockMovement>> GetByDate(DateOnly? startDate, DateOnly? endDate)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace StockControlApi.Service
                     throw new ArgumentNullException("Verifique se as datas estão com os valores certos");
                 }
 
-                List<StockMovement> list = await _context.StockMovement.Where(s => s.MovementDate.Date.Date == startDate && s.MovementDate.Date.Date == endDate).OrderBy(s => s.MovementDate).ToListAsync();
+                List<StockMovement> list = await _context.StockMovement.Where(s => s.MovementDate >= startDate && s.MovementDate <= endDate).OrderBy(s => s.MovementDate).ToListAsync();
 
                 if (list.Count == 0)
                     throw new ArgumentNullException("Nenhuma movimentação foi encontrada");

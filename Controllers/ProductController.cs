@@ -223,7 +223,7 @@ namespace StockControlApi.Controllers
     
         #region GetByDate
         [HttpGet("ByDate")]
-        public async Task<IActionResult> GetByDate([FromQuery] DateTime startDate, DateTime endDate)
+        public async Task<IActionResult> GetByDate([FromQuery] DateOnly startDate, DateOnly endDate)
         {
             try
             {

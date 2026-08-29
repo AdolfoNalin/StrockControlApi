@@ -68,8 +68,8 @@ namespace StockControlApi.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("CreatedAt")
+                        .HasColumnType("date");
 
                     b.Property<string>("Description")
                         .HasMaxLength(200)
@@ -80,8 +80,8 @@ namespace StockControlApi.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly?>("UpdatedAt")
+                        .HasColumnType("date");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -102,8 +102,8 @@ namespace StockControlApi.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("CreatedAt")
+                        .HasColumnType("date");
 
                     b.Property<string>("Description")
                         .HasMaxLength(150)
@@ -114,8 +114,8 @@ namespace StockControlApi.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly?>("UpdatedAt")
+                        .HasColumnType("date");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -146,8 +146,8 @@ namespace StockControlApi.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("CreatedAt")
+                        .HasColumnType("date");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -179,8 +179,8 @@ namespace StockControlApi.Migrations
                     b.Property<int>("UnitType")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly?>("UpdatedAt")
+                        .HasColumnType("date");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -204,8 +204,8 @@ namespace StockControlApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("MovementDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("MovementDate")
+                        .HasColumnType("date");
 
                     b.Property<int>("MovimentType")
                         .HasColumnType("integer");
@@ -258,8 +258,8 @@ namespace StockControlApi.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("CreatedAt")
+                        .HasColumnType("date");
 
                     b.Property<string>("Email")
                         .HasMaxLength(200)
@@ -286,8 +286,8 @@ namespace StockControlApi.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly?>("UpdatedAt")
+                        .HasColumnType("date");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -311,8 +311,8 @@ namespace StockControlApi.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("CreatedAt")
+                        .HasColumnType("date");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -329,8 +329,8 @@ namespace StockControlApi.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly?>("UpdatedAt")
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 
