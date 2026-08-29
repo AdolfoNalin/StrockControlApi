@@ -63,9 +63,11 @@ namespace StockControlApi.Models
         : ((SalePrice - BuyPrice) / BuyPrice) * 100;
 
         [Required(ErrorMessage = "O campo Data de criação é obrigatório")]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        [DataType(DataType.Date)]
+        public DateOnly CreatedAt { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        public DateTime? UpdatedAt { get; set; }
+         [DataType(DataType.Date)]
+        public DateOnly? UpdatedAt { get; set; }
 
         public string? ImagePath { get; set; }
 

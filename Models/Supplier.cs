@@ -52,10 +52,11 @@ namespace StockControlApi.Models
         public bool Active { get; set; } = true;
 
         [Required(ErrorMessage = "O campo de Data está vazio")]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        [DataType(DataType.Date)]
+        public DateOnly CreatedAt { get; set; } =  DateOnly.FromDateTime(DateTime.UtcNow);
 
-
-        public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
+        [DataType(DataType.Date)]
+        public DateOnly? UpdatedAt { get; set; }
 
         [JsonIgnore]
         [ForeignKey(nameof(UserId))]

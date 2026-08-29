@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace StockControlApi.Models
 {
@@ -20,9 +21,12 @@ namespace StockControlApi.Models
 
         public bool Active { get; set; } = true;
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        [Required(ErrorMessage = "O Campo data está vazio")]
+        [DataType(DataType.Date)]
+        public DateOnly CreatedAt { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        public DateTime? UpdatedAt { get; set; }
+         [DataType(DataType.Date)]
+        public DateOnly? UpdatedAt { get; set; }
 
         [JsonIgnore]
         [ForeignKey(nameof(UserId))]
