@@ -20,7 +20,7 @@ namespace StockControlApi.Service
             try
             {
                 List<Product> products = await _context.Product
-                    .Where(p => p.CreatedAt >= start && p.CreatedAt <= end)
+                    .Where(p => p.CreatedAt >= startDate && p.CreatedAt <= endDate)
                     .ToListAsync();
 
                 if (products == null || products.Count == 0)

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Mvc;
 using StockControlApi.Libiries;
 using StockControlApi.Models;
 using StockControlApi.Service;
@@ -223,11 +224,17 @@ namespace StockControlApi.Controllers
     
         #region GetByDate
         [HttpGet("ByDate")]
-        public async Task<IActionResult> GetByDate([FromQuery] DateOnly startDate, DateOnly endDate)
+        public async Task<IActionResult> GetByDate([FromQuery] string startDate, [FromQuery] string endDate)
         {
             try
             {
-                List<Product> products = await _productService.GetByDate(startDate, endDate);
+                if (!DateOnly.TryParseExact(startDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var start))
+                    return BadRequest("startDate inválido. Use o formato yyyy-MM-dd.");
+
+                if (!DateOnly.TryParseExact(endDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var end))
+                    return BadRequest("endDate inválido. Use o formato yyyy-MM-dd.");
+
+                List<Product> products = await _productService.GetByDate(start, end);
 
                 return Ok(products);
             }
