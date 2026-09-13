@@ -22,7 +22,7 @@ namespace StockControlApi.Models
 
         [Required(ErrorMessage = "O campo descrição está vazio")]
         [StringLength(500, ErrorMessage = "Verifique a quantidade de caracteris")]
-        public string Descriction { get; set; }
+        public string Description { get; set; }
 
         [Required(ErrorMessage = "O campo tipo de movimentação está vazio")]
         public MovimentType MovimentType { get; set; }
